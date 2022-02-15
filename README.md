@@ -24,6 +24,12 @@ We can use the same mechanism to create a synthetic for a given NFT collection. 
 
 We want to change the chainlink oracle used so we can fetch dynamic collection price data. The current oracles in use are found in `ExchangeRates.sol` where `Aggregator` and `Flag` interfaces are imported. We can make a GET request within an oracle as described [here](https://docs.chain.link/docs/make-a-http-get-request/).
 
+An alternative approach to an oracle to fetch price data is to make a FE fetch and pass that result into the BE. This approach would require a nonce to verify request's validity, but the most complexity will likely come from changing flow from contract entrypoint to accommodate new argument passed from FE. So the recommended approach is to make an oracle.
+
+The oracle needs to make a post to our [firebase appraisal endpoint](https://github.com/Mimicry-Protocol/mimicry-firebase-api/blob/main/functions/public/collection/appraisal.f.js) by specifying the collection slug in the request and parsing a `averagePriceInUsd` string from the JSON response.
+
+Next steps are to make our specified NFT collection synths use our new oracle's method, while making sure existing synths instead use existing oracle methods. But we also need to make sure that the `Appraisal API` response includes all necessary data such that the new oracle return value shape matches that of existing oracle methods to facilitate new oracle method integration with the existing system. The former task may be approached by customizing the Synth generation logic in the deploy scripts, while the latter task may require tracking the flow of core methods (eg `issueSynths`) to the point that they interact with the existing oracle methods to know the expected return value shapes.
+
 
 # Synthetix
 
