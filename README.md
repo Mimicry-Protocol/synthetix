@@ -1,3 +1,17 @@
+# Mimicry
+
+## Dev notes
+
+To run locally,
+1. Run `npm install` in root
+2. Run `npx hardhat node` in one terminal to start a local node
+3. Run `node publish build -t && node publish deploy -n local -h --add-new-synths` in a second terminal to build with test flags (required for local dev) and deploy the local node while ensuring new synth contracts will be generated and deployed.
+
+Our goal is to create new Synthetics for NFT collections. We can do that by using the existing `MultiCollateralSynth`. Synthetix deploys contracts representing an arbitrary synthetic by specifying the desired synthetic in config files and running a deploy script which generates a contract for that synth as a subclass of `MultiCollateralSynth`. 
+
+We can use the same mechanism to create a synthetic for a given NFT collection. While we can manually make changes in config files, the most reliable way to do it is a find-and-replace across the whole codebase to swap an existing synthetic name for the desired name of our collection. Find and replace is more reliable because tracking down each relevant file is difficult and causes deploy failures until done thoroughly.
+
+
 # Synthetix
 
 [![CircleCI](https://circleci.com/gh/Synthetixio/synthetix.svg?style=svg)](https://circleci.com/gh/Synthetixio/synthetix)
